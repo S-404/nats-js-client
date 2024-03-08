@@ -36,7 +36,7 @@ export const MessagesTab: FC = observer(() => {
 
   if (!selectedSubject) {
     return (
-      <TabContainer name={'Publish message'}>
+      <TabContainer name={'Messages'}>
         <div className="publish-tab-container_empty">
           <p>{subjects.length ? 'Select subject' : 'Add subject'}</p>
         </div>
