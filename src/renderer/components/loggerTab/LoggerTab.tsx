@@ -1,7 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react';
 import TabContainer from '../shared/tabContainer/TabContainer.tsx';
 import LogMessagesStore from '#renderer/store/LogMessagesStore.ts';
-import { observer } from 'mobx-react';
+import IconButton from '#renderer/components/shared/buttons/iconButton/IconButton.tsx';
+
 import './loggerTab.scss';
 
 export const LoggerTab: FC = observer(() => {
@@ -46,6 +48,14 @@ export const LoggerTab: FC = observer(() => {
               >
                 {item.message}
               </a>
+              {item.subject && (
+                <a className='copy-button'>
+                  <IconButton
+                    iconType='copy'
+                    onClick={() => navigator.clipboard.writeText(item.subject)}
+                  />
+                </a>
+              )}
             </div>
           ))}
         </div>

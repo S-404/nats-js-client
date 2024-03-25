@@ -5,6 +5,7 @@ export type ServerConnectionType = {
   host: string;
   port?: string;
   token?: string;
+  title?: string;
 }
 
 class ServerConnectionsStore {

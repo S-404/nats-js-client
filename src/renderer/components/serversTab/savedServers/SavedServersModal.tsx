@@ -83,6 +83,7 @@ const SavedServersModal: FC<ISavedServersModalProps> = observer(({ isModalOpened
               onClick={() => loadFromStore(item)}
             >
               <div className="item__content">
+                <p><b>{item.title}</b></p>
                 <p><i>host:</i> {item.host}</p>
                 <p><i>port:</i> {item.port}</p>
               </div>

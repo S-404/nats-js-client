@@ -23,8 +23,28 @@
       padding: 2px 0;
 
 
+      .copy-button {
+        position: relative;
+        display: none;
+        margin-left: .3em;
 
-      &:active{
+        .icon-button {
+          position: absolute;
+          top: -.1em;
+          scale: 0.8;
+          &:active{
+            scale: 0.9;
+          }
+        }
+      }
+
+      &:hover{
+        & > .copy-button{
+          display: unset;
+        }
+      }
+
+      &:active {
         border-color: #212121;
       }
 
@@ -34,8 +54,8 @@
 
       .log-item__message {
 
-        &:hover{
-          border-bottom: 2px solid $inputBorderFgColorHover;
+        &:hover {
+          border-bottom: 2px solid $inputBorderFgColorInactive;
           cursor: copy;
           padding-bottom: 0;
         }

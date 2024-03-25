@@ -64,6 +64,12 @@ export const MessagesTab: FC = observer(() => {
             color={'white'}
             onClick={() => setIsShownAll(prevState => !prevState)}
           />
+          <MyButton
+            text={'Copy'}
+            color={'white'}
+            disabled={!messages.length}
+            onClick={() => navigator.clipboard.writeText(messages)}
+          />
         </div>
       </div>
     </TabContainer>

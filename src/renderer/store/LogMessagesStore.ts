@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx';
 export type LoggerMessageType = {
   time: string;
   message: string;
+  subject?: string;
   type: 'info' | 'warn' | 'error' | 'success'
 }
 

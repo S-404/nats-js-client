@@ -1,0 +1,15 @@
+.save-connection {
+
+  width: 80%;
+
+  &__inputs {
+    .my-input{
+      margin-bottom: 1em;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}

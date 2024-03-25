@@ -5,9 +5,10 @@ import MyInput from '../shared/inputs/myInput/MyInput.tsx';
 import MyButton from '../shared/buttons/myButton/MyButton.tsx';
 import { observer } from 'mobx-react';
 import NatsClientStore from '#renderer/store/NatsClientStore.ts';
-import ServerConnectionsStore, { ServerConnectionType } from '#renderer/store/ServerConnectionsStore.ts';
+import ServerConnectionsStore from '#renderer/store/ServerConnectionsStore.ts';
 import { useModal } from '#renderer/hooks/useModal.ts';
 import SavedServersModal from '#renderer/components/serversTab/savedServers/SavedServersModal.tsx';
+import SaveAsModal from '#renderer/components/serversTab/saveAs/SaveAsModal.tsx';
 
 import './serversTab.scss';
 
@@ -16,7 +17,16 @@ export const ServersTab: FC = observer(() => {
   const { isConnected } = NatsClientStore;
   const { currentConnection } = ServerConnectionsStore;
   const [isSaved, setIsSaved] = useState<boolean>(false);
-  const { isOpened, open, close } = useModal();
+  const {
+    isOpened: isOpenedModalSavedConnections,
+    open: openModalSavedConnections,
+    close: closeModalSavedConnections
+  } = useModal();
+  const {
+    isOpened: isOpenedModalSaveAs,
+    open: openModalSaveAs,
+    close: closeModalSaveAs
+  } = useModal();
 
 
   const updateConnection = <
@@ -40,30 +50,9 @@ export const ServersTab: FC = observer(() => {
     checkStore();
   }, []);
 
-  const saveToStore = async (connection: ServerConnectionType) => {
-    if (isSaved) return;
-
-    const newConnection = {
-      ...connection,
-      id: `${connection.host}:${connection.port}`,
-    };
-    const stored: ServerConnectionType & {
-      id: [string]
-    }[] = (await appActionDispatcher('storeGet', 'connections')) ?? [];
-
-    const connectionsSet = new Set(stored);
-    connectionsSet.add({ ...newConnection, id: [newConnection.id] });
-
-    appActionDispatcher('storeSave', {
-      connections: Array.from(connectionsSet)
-    });
-    ServerConnectionsStore.addConnection(newConnection);
-    setIsSaved(true);
-  };
-
   useEffect(() => {
     setIsSaved(false);
-  }, [currentConnection, isOpened]);
+  }, [currentConnection, isOpenedModalSavedConnections]);
 
   const connect = async () => {
     const { host, port, token } = currentConnection;
@@ -117,15 +106,15 @@ export const ServersTab: FC = observer(() => {
                   disabled={!currentConnection.host}
                 />
                 <MyButton
-                  text={isSaved ? 'Saved' : 'Save'}
-                  onClick={() => saveToStore(currentConnection)}
+                  text={isSaved ? 'Saved' : 'Save as'}
+                  onClick={openModalSaveAs}
                   color={isSaved ? 'white' : 'green'}
                   disabled={!currentConnection.host}
                 />
                 <MyButton
                   text={'Load'}
                   color={'white'}
-                  onClick={open}
+                  onClick={openModalSavedConnections}
                 />
               </>
             }
@@ -133,8 +122,14 @@ export const ServersTab: FC = observer(() => {
         </div>
       </div>
       <SavedServersModal
-        isModalOpened={isOpened}
-        closeModal={close}/>
+        isModalOpened={isOpenedModalSavedConnections}
+        closeModal={closeModalSavedConnections}
+      />
+      <SaveAsModal
+        isModalOpened={isOpenedModalSaveAs}
+        closeModal={closeModalSaveAs}
+        updateConnection={updateConnection}
+      />
     </TabContainer>
   );
 });
